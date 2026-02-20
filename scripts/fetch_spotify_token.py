@@ -6,6 +6,7 @@ from __future__ import annotations
 import os
 from urllib.parse import urlparse
 
+import requests
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -29,12 +30,43 @@ def validate_redirect_uri(uri: str) -> None:
         )
 
 
+def fetch_token_from_refresh_token(client_id: str, client_secret: str, refresh_token: str) -> str:
+    response = requests.post(
+        "https://accounts.spotify.com/api/token",
+        data={
+            "grant_type": "refresh_token",
+            "refresh_token": refresh_token,
+            "client_id": client_id,
+            "client_secret": client_secret,
+        },
+        timeout=30,
+    )
+    response.raise_for_status()
+
+    payload = response.json()
+    access_token = str(payload.get("access_token", "")).strip()
+    if not access_token:
+        raise RuntimeError("Spotify token endpoint returned an empty access token")
+
+    return access_token
+
+
 def fetch_spotify_token(scopes: str = DEFAULT_SCOPES) -> str:
     """Return a Spotify access token for the provided OAuth scopes."""
     load_dotenv()
 
     client_id = require_env("SPOTIFY_CLIENT_ID")
     client_secret = require_env("SPOTIFY_CLIENT_SECRET")
+    refresh_token = os.getenv("SPOTIFY_REFRESH_TOKEN", "").strip()
+
+    # Non-interactive path for Docker/CI.
+    if refresh_token:
+        return fetch_token_from_refresh_token(
+            client_id=client_id,
+            client_secret=client_secret,
+            refresh_token=refresh_token,
+        )
+
     redirect_uri = require_env("SPOTIPY_REDIRECT_URI")
     validate_redirect_uri(redirect_uri)
 

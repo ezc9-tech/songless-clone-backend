@@ -105,7 +105,7 @@ make build
 4. Run:
 
 ```bash
-make run
+make sync-all
 ```
 
 `make run` will:

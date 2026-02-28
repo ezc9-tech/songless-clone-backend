@@ -145,7 +145,7 @@ def main() -> int:
             "soundcloud_url": url
         }
         if url:
-            print(f"Found: {url}")
+            # print(f"Found: {url}")
             found_count += 1
         else:
             print(f"No results found for '{song} by {artist}'.")

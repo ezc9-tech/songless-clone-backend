@@ -1,0 +1,35 @@
+name: Scheduled Sync
+
+on:
+  schedule:
+    # Run at midnight CST every night (06:00 UTC)
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    # Allows manual trigger for testing
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up .env file
+        run: |
+          touch .env
+          echo "SPOTIFY_CLIENT_ID=${{ secrets.SPOTIFY_CLIENT_ID }}" >> .env
+          echo "SPOTIFY_CLIENT_SECRET=${{ secrets.SPOTIFY_CLIENT_SECRET }}" >> .env
+          echo "SPOTIFY_PLAYLIST_ID=${{ secrets.SPOTIFY_PLAYLIST_ID }}" >> .env
+          echo "SPOTIPY_REDIRECT_URI=${{ secrets.SPOTIPY_REDIRECT_URI }}" >> .env
+          echo "SPOTIFY_REFRESH_TOKEN=${{ secrets.SPOTIFY_REFRESH_TOKEN }}" >> .env
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
+          echo "SUPABASE_PUBLISHABLE_KEY=${{ secrets.SUPABASE_PUBLISHABLE_KEY }}" >> .env
+          echo "SOUNDCLOUD_CLIENT_ID=${{ secrets.SOUNDCLOUD_CLIENT_ID }}" >> .env
+          echo "SOUNDCLOUD_CLIENT_SECRET=${{ secrets.SOUNDCLOUD_CLIENT_SECRET }}" >> .env
+
+      - name: Build the app
+        run: make build
+
+      - name: Run sync-all
+        run: make sync-all

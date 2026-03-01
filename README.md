@@ -26,13 +26,15 @@ SPOTIFY_CLIENT_ID=your_spotify_client_id
 SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
 SPOTIFY_PLAYLIST_ID=your_spotify_playlist_id
 SPOTIPY_REDIRECT_URI=http://127.0.0.1:8888/callback
-# optional, recommended for Docker/CI (non-interactive):
+# optional, enables non-interactive auth for Docker/CI:
 SPOTIFY_REFRESH_TOKEN=your_spotify_refresh_token
 
 SUPABASE_URL=your_supabase_url
+SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
 SUPABASE_ANON_KEY=your_supabase_anon_key
-# optional, preferred for inserts:
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+
+SOUNDCLOUD_CLIENT_ID=your_soundcloud_client_id
+SOUNDCLOUD_CLIENT_SECRET=your_soundcloud_client_secret
 ```
 
 ## 3. Run Spotify scripts

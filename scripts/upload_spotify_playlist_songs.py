@@ -32,7 +32,7 @@ def main() -> int:
     load_dotenv()
 
     supabase_url = require_env("SUPABASE_URL")
-    supabase_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "").strip() or require_env("SUPABASE_ANON_KEY")
+    supabase_key = require_env("SUPABASE_ANON_KEY")
 
     rows = fetch_playlist_songs()
 

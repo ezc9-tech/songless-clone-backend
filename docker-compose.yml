@@ -5,4 +5,3 @@ services:
     container_name: songless-app
     env_file:
       - .env
-    command: ["node", "src/server.js"]

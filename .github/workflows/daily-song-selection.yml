@@ -1,0 +1,31 @@
+name: Daily Song Selection
+
+on:
+  schedule:
+    # Run at midnight CST every night (06:00 UTC)
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    # Allows manual trigger for testing
+
+jobs:
+  select-daily:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: songless-clone-backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up .env file
+        run: |
+          touch .env
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
+
+      - name: Build the app
+        run: make build
+
+      - name: Run daily song selection
+        run: make select-daily

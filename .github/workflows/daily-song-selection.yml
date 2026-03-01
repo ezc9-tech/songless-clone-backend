@@ -10,9 +10,6 @@ on:
 jobs:
   select-daily:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: songless-clone-backend
 
     steps:
       - name: Checkout repository
